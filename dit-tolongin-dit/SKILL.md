@@ -38,6 +38,13 @@ Tujuannya menemukan bug dengan bukti test, melaporkannya rapi, lalu memperbaiki 
 7. **Kesalahan yang menyangkut uang, stok, jurnal, atau kebocoran data wajib dilaporkan** walau kecil
    (selisih pembulatan, akun salah, tanggal salah, data cabang lain terlihat).
 8. Ikuti aturan coding project (mis. `.agents/rules/`, `CONTRIBUTING.md`) saat memperbaiki.
+9. **Uji bertingkat sesuai besar perubahan, jangan selalu full suite.** Full suite bisa makan puluhan menit dan
+   user ingin hasil cepat.
+   - Perbaikan kecil/lokal (satu form, satu laporan, satu fungsi, urutan kolom, teks): cukup test grup itu + test
+     baru + test modul lain yang memanggil kode yang diubah. Setelah lulus boleh langsung commit/push kalau diminta.
+   - Full suite hanya kalau: perbaikan lintas banyak modul atau app-wide (helper global, middleware, provider,
+     konfigurasi, upgrade paket), sebelum deploy ke produksi, atau user memintanya. Jalankan di latar belakang dan
+     laporkan hasil uji terarah lebih dulu.
 
 ## 2. Alur satu putaran (per grup menu)
 
@@ -52,10 +59,10 @@ Tujuannya menemukan bug dengan bukti test, melaporkannya rapi, lalu memperbaiki 
 | 6. Hak akses | Tiap peran: menu sesuai izin, URL langsung ditolak (bukan error 500), aksi tanpa izin ditolak, data cabang/pemilik lain tidak bocor. | Test akses |
 | 7. Halaman & cetakan | Semua halaman grup terbuka tanpa error; cetak/PDF/Excel jalan dan **angkanya sama dengan layar**. | Smoke test |
 | 8. Laporan silang | Angka yang sama muncul identik di semua laporan terkait. | Test konsistensi |
-| 9. Catat temuan | Tulis di `docs/audit-bug-<grup>.md`: bug + bukti test, keputusan K-xx, yang sudah terbukti benar, sisa uji manual. Test pembukti bug diberi grup `temuan` supaya full suite tidak merah. | Dokumen temuan |
+| 9. Catat temuan | Tulis di `docs/audit-bug-<grup>.md`: bug + bukti test, keputusan K-xx, yang sudah terbukti benar, sisa uji manual. Test pembukti bug diberi grup `temuan` supaya suite tidak merah. | Dokumen temuan |
 | 10. Lapor | Ringkas: jumlah bug per tingkat, ada/tidak bug uang/stok/jurnal, daftar keputusan beserta opsinya. **Berhenti, tunggu perintah.** | |
 | 11. Perbaiki | Sesuai keputusan. Pindahkan test pembukti dari grup `temuan` ke test biasa yang mengunci perilaku baru. | |
-| 12. Regresi | Test grup + full suite di database produksi. Bandingkan dengan kegagalan bawaan lama supaya tidak dikira regresi. Cek grup lain yang memakai kode yang diubah. | Angka lulus/gagal |
+| 12. Regresi | Test grup + test grup lain yang memakai kode yang diubah, di database produksi. Full suite hanya sesuai aturan kerja 9 (perubahan besar/app-wide, sebelum deploy, atau diminta). Bandingkan dengan kegagalan bawaan lama supaya tidak dikira regresi. | Angka lulus/gagal |
 | 13. Putaran lanjutan | Kalau perbaikan menyentuh banyak tempat, ulangi langkah 4–8 untuk bug turunan. | |
 | 14. Tutup | Perbarui dokumen temuan, backlog, dan tabel status/log putaran di template project. Commit kalau diminta. | |
 
@@ -85,7 +92,7 @@ Tujuannya menemukan bug dengan bukti test, melaporkannya rapi, lalu memperbaiki 
 - Satu kalimat hasil utama dulu (mis. "Grup Stok: 3 bug, 0 bug jurnal, 1 keputusan.").
 - Tabel bug: ID · tingkat · apa yang salah · dampak · status.
 - Keputusan K-xx: pertanyaan, opsi (a)/(b) beserta dampaknya, rekomendasi.
-- Angka test: baseline, test baru (berapa merah sebelum perbaikan), full suite dibanding kegagalan bawaan.
+- Angka test: baseline, test baru (berapa merah sebelum perbaikan), test terkait; full suite (kalau dijalankan) dibanding kegagalan bawaan.
 - Sisa uji manual.
 - Lalu berhenti.
 

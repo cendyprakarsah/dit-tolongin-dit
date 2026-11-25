@@ -82,5 +82,5 @@ public function test_s12_mutasi_fifo_tidak_mengubah_total_nilai_stok(): void
 }
 ```
 
-Jalankan full suite dengan grup `temuan` dikecualikan (mis. `--exclude-group=temuan`) supaya tidak merah selama bug
+Saat menjalankan suite (grup lain atau full suite), kecualikan grup `temuan` (mis. `--exclude-group=temuan`) supaya tidak merah selama bug
 belum diputuskan. Setelah diperbaiki, hapus grup `temuan`, pindahkan ke grup alur, lalu jalankan ulang.
